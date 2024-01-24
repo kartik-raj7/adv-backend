@@ -87,6 +87,11 @@ class UserController{
               }
             }
         }
+        else{
+            res.status(403).send({
+                "status":'failed',"message":"Wrong Email or password"
+               })
+        }
        }catch (error){
            res.status(403).send({
             "status":'failed',"message":"Wrong Email or password"
