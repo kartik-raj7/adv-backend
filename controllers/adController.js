@@ -1,20 +1,22 @@
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+
 import AdsModel from '../models/Ads.js'
 import UserModel from '../models/User.js'
 import AdsMetricsModel from '../models/AdCount.js'
-
+import MultimediaModel from '../models/AdMultimedia.js'
+import cloudinary from 'cloudinary'
 class AdController{
     static PostAd = async(req,res)=>
     { 
           const { ad_headline,ad_multimedia,ad_detail,ad_description,ad_url,ad_scheduledtime,ad_expirationtime,ad_location} = req.body
             if(ad_headline&&ad_multimedia&&ad_detail&&ad_description&&ad_url&&ad_scheduledtime&&ad_expirationtime&&ad_location){
                 const user = await UserModel.findOne({email:req.user.email});
+                const cloudinaryResponse = await cloudinary.uploader.upload(ad_multimedia);
+                // req.body.ad_multimedia = { url: cloudinaryResponse.secure_url };
                 if(user.type==='Advertiser'){
                 try{ 
                     const newad= new AdsModel({
                         ad_headline:ad_headline,
-                        ad_multimedia:ad_multimedia,
+                        ad_multimedia:cloudinaryResponse.url,
                         ad_detail: ad_detail,
                         ad_description: ad_description,
                         ad_url:ad_url , 
@@ -25,6 +27,16 @@ class AdController{
                         ad_name:user.name,
                     })
                     await newad.save();
+                    const newImageUpload = new MultimediaModel({
+                        url: cloudinaryResponse.url,
+                        secure_url: cloudinaryResponse.secure_url,
+                        asset_id: cloudinaryResponse.asset_id,
+                        public_id: cloudinaryResponse.public_id,
+                        format: cloudinaryResponse.format,
+                        resource_type: cloudinaryResponse.resource_type,
+                        creator: user.email,
+                    })
+                    await newImageUpload.save();
                     const adMetrics = new AdsMetricsModel({
                         ad_id: newad._id, 
                         ad_clicks: 0,

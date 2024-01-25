@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-
 // Defining Schema
-
 const AdsSchema = new mongoose.Schema({
     ad_headline:{type: String , required:true , trim:true},
     ad_multimedia:{type: String , required:true , trim:true},
