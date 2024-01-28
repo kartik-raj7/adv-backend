@@ -78,7 +78,7 @@ class UserController{
                 const token = jwt.sign({userID:saved_user._id}, process.env.JWT_SECRET_KEY,{expiresIn:'7d'})
                 res.status(201).send({
                     "status":'success',"message":"Login successful",
-                    "token":token})
+                    "token":token,"type":user.type})
               }
               else{
                 res.status(403).send({
@@ -86,6 +86,12 @@ class UserController{
                    })
               }
             }
+            else{
+                res.status(403).send({
+                    "status":'failed',"message":"No account with these credentials exists"
+                   })
+              }
+
         }
         else{
             res.status(403).send({

@@ -11,9 +11,19 @@ cloudinary.config({
 class UploadController {
   static handleMultimediaUpload = async (req, res) => {
     const user = await UserModel.findOne({ email: req.user.email });
+    const uploadFileToCloudinary = async (file, folder) => {
+      const options = { folder, resource_type: 'auto' };
+      try {
+        const response = await cloudinary.v2.uploader.upload(file, options);
+        return response;
+      } catch (error) {
+        console.error('Error uploading to Cloudinary:', error);
+        throw error; // Re-throw the error to handle it in the calling function
+      }
+    };
     try {
       if (req.body.ad_multimedia) {
-        const cloudinaryResponse = await cloudinary.uploader.upload(req.body.ad_multimedia);
+        const cloudinaryResponse = await uploadFileToCloudinary(req.body.ad_multimedia);
         req.body.ad_multimedia = { url: cloudinaryResponse.secure_url };
         const newImageUpload = new MultimediaModel({
           url: cloudinaryResponse.url,
@@ -25,7 +35,7 @@ class UploadController {
           creator: user.email,
       })
       await newImageUpload.save();
-        res.status(201).send({ "status": "success", "message": "Image Uploaded successfully","link":cloudinaryResponse.secure_url });
+        res.status(201).send({ "status": "success", "message": cloudinaryResponse.resource_type=='image'?"Image Uploaded successfully":"Video Uploaded successfully","link":cloudinaryResponse.secure_url });
       } else {
         res.status(400).send({ "status": "failure", "message": "Could not upload" });
       }
