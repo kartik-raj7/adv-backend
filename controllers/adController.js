@@ -43,8 +43,7 @@ class AdController {
             ad_scheduledtime: ad_scheduledtime,
             ad_expirationtime: ad_expirationtime,
             ad_location: ad_location,
-            ad_creator: user.email,
-            ad_name: user.name,
+            ad_creator: user.name,
           });
           await newad.save();
           if (!ad_url) {
@@ -97,7 +96,7 @@ class AdController {
           .status(404)
           .json({ status: "failed", message: "User not found" });
       }
-      if (user.type != "Advertiser") {
+      if (user.type == "Advertiser") {
         const ads = await AdsModel.find({ ad_creator: req.user.email });
         const adsWithMetrics = await Promise.all(
           ads.map(async (ad) => {

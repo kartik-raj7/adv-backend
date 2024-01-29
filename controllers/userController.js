@@ -195,5 +195,60 @@ class UserController{
         res.send({ "status": "failed", "message": "Invalid Token" })
      }
    }
+   static userSearch = async (req,res)=>{
+    const user = await UserModel.findOne({ email: req.user.email });
+    try{
+      if(user.type==='Admin'){
+        const userQuery = await req.query;
+        const allUsers = await UserModel.find({});
+        const searchTerm = userQuery['search'].toLowerCase();
+        const filteredUsers = allUsers.filter((info)=>{
+                const name = info['name'].toLowerCase();
+                const email = info['email'].toLowerCase();
+                return name.includes(searchTerm)||email.includes(searchTerm)
+            }).map(user=>{
+                const modifieduser = user.toObject();
+                delete modifieduser.__v;
+                delete modifieduser.password;
+                return modifieduser
+            })
+           res.status(201).send({"status":'success',"message":'data fetched',data:filteredUsers})
+        }
+      else{
+       res.status(400).send({
+           "status":"failed","message":"You dont have permissions to make this request contact support"
+       })
+      }
+    } catch(error){
+       res.send({ "status": "failed", "message": "Something went wrong" })
+    }
+  }
+  static updateRoles = async (req,res)=>{
+    const user = await UserModel.findOne({ email: req.user.email });
+    const { id } = req.params;
+    try{
+        if (Object.keys(req.body).length === 0) {
+            return res
+              .status(400)
+              .json({ status: "failed", message: "No fields provided for update" });
+       }
+      if(user.type==='Admin'){
+        const { user_role } = req.body;
+          await UserModel.findByIdAndUpdate(id,{
+            $set:{
+                type: user_role,
+            }
+        })
+           res.status(201).send({"status":'success',"message":'Role Updated successfully'})
+        }
+      else{
+       res.status(400).send({
+           "status":"failed","message":"You dont have permissions to make this request contact support"
+       })
+      }
+    } catch(error){
+       res.send({ "status": "failed", "message": "Something went wrong" })
+    }
+  }
 }
 export default UserController
