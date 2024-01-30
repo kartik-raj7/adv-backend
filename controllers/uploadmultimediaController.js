@@ -40,7 +40,7 @@ class UploadController {
         res.status(400).send({ "status": "failure", "message": "Could not upload" });
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       res.status(500).send({ "status": "failure", "message": "Internal server error" });
     }
   }
@@ -58,7 +58,7 @@ class UploadController {
             res.status(200).send({ "status": "success", "data": allAds });
         }
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).send({ "status": "failure", "message": "Something went wrong" });
     }
 }

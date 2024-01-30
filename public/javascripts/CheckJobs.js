@@ -7,7 +7,6 @@ const deleteExpiredJobs = async () => {
         const expirationDate = new Date(data.ad_expirationtime.slice(0, 10));
         if(expirationDate<currentDate){
             // console.log(expirationDate);
-            console.log(data)
             await AdsModel.findOneAndDelete({
                 _id: data._id,
                 ad_creator: data.ad_creator,

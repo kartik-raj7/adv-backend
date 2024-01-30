@@ -15,7 +15,6 @@ class AdController {
       ad_expirationtime,
       ad_location,
     } = req.body;
-    console.log(req.body);
     if (
       ad_headline &&
       (ad_multimedia || ad_url) &&
@@ -69,7 +68,7 @@ class AdController {
             .status(201)
             .send({ status: "success", message: "Add created successfully" });
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           res
             .status(400)
             .send({ status: "failed", message: "Failed to create ad" });
@@ -151,7 +150,7 @@ class AdController {
         ad_location,
       } = req.body;
       if (!user || user.type !== "Advertiser") {
-        console.log(user);
+        // console.log(user);
         return res
           .status(404)
           .json({
