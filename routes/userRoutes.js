@@ -4,7 +4,6 @@ import UserController from "../controllers/userController.js";
 import checkUserAuth from "../middlewares/middleware.js";
 import AdController from "../controllers/adController.js";
 import UploadController from "../controllers/uploadmultimediaController.js";
-import MultimediaModel from "../models/AdMultimedia.js";
 
 ///Route Level Middleware - To Protect Route
 router.use('/changepassword',checkUserAuth)

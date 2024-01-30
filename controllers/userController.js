@@ -7,7 +7,7 @@ class UserController{
     static userRegistration = async(req,res)=>
     {
           const {name,email,password,type,location} = req.body
-          const user = await UserModel.findOne({email:email})
+          const user = await UserModel.findOne({email:email.toLowerCase()})
           if(user){
             res.status(400).send({"status":"failed","message":"Email already exists"})
           }else{
@@ -19,13 +19,13 @@ class UserController{
                     const hashPassword = await bcrypt.hash(password,salt);
                     const newuser= new UserModel({
                         name:name,
-                        email:email,
+                        email:email.toLowerCase(),
                         password:hashPassword,
                         type:type,
                         location:location
                     })
                     await newuser.save()
-                    const saved_user = await UserModel.findOne({email:email})
+                    const saved_user = await UserModel.findOne({email:email.toLowerCase()})
                     ///generate JWT Token
                     const token = jwt.sign({userID:saved_user._id},
                         process.env.JWT_SECRET_KEY,{expiresIn:'7d'})
@@ -44,13 +44,13 @@ class UserController{
                     const hashPassword = await bcrypt.hash(password,salt);
                     const newuser= new UserModel({
                         name:name,
-                        email:email,
+                        email:email.toLowerCase(),
                         password:hashPassword,
                         type:type,
                         location:location
                     })
                     await newuser.save()
-                    const saved_user = await UserModel.findOne({email:email})
+                    const saved_user = await UserModel.findOne({email:email.toLowerCase()})
                     ///generate JWT Token
                     const token = jwt.sign({userID:saved_user._id}, process.env.JWT_SECRET_KEY,{expiresIn:'7d'})
                         res.status(201).send({"status":"success","message":"Registration successful","token":token})
@@ -69,11 +69,11 @@ class UserController{
        try{
         const {email,password} = req.body
         if(email && password){
-            const user = await UserModel.findOne({email:email})
+            const user = await UserModel.findOne({email:email.toLowerCase()})
             if(user != null){
               const isMatch = await bcrypt.compare(password,user.password)
-              if(user.email===email && isMatch){
-                const saved_user = await UserModel.findOne({email:email})
+              if(user.email ===email.toLowerCase() && isMatch){
+                const saved_user = await UserModel.findOne({email:email.toLowerCase()})
                 ///generate JWT Token
                 const token = jwt.sign({userID:saved_user._id}, process.env.JWT_SECRET_KEY,{expiresIn:'7d'})
                 res.status(201).send({

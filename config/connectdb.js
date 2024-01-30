@@ -6,7 +6,7 @@ const connectDb = async (DATABSE_URL)=>{
          dbName: "scootersondb"
       }
       await mongoose.connect(DATABSE_URL,DB_OPTIONS);
-      console.log('connected successfully') // remove in production
+      // console.log('connected successfully') // remove in production
     } catch(error){
         console.log(error)
     }

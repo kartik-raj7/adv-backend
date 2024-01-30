@@ -100,7 +100,7 @@ class AdController {
         const ads = await AdsModel.find({ ad_creator: req.user.email });
         const adsWithMetrics = await Promise.all(
           ads.map(async (ad) => {
-            const metrics = await AdsMetricsModel.findOne({ ad_id: ad._id });
+            const metrics = await AdsMetricsModel.findOne({ ad_id: ad._id });        
             const adObject = ad.toObject();
             const metricsObject = metrics ? metrics.toObject() : null;
             delete adObject.__v;
@@ -116,7 +116,18 @@ class AdController {
         res.status(200).json({ status: "success", data: adsWithMetrics });
       } else {
         const allAds = await AdsModel.find({});
-        res.status(200).json({ status: "success", data: allAds });
+        const currentLiveAds = allAds.filter((ad)=>{
+          const  currentDate = new Date();
+            const scheduledDate = new Date(ad.ad_scheduledtime.slice(0, 10));
+            const expirationDate = new Date(ad.ad_expirationtime.slice(0, 10));
+            return currentDate>=scheduledDate&&currentDate<expirationDate;
+        }).map((ad)=>{
+          const adObject = ad.toObject();
+          delete adObject.__v;
+          return adObject;
+        })
+      
+        res.status(200).json({ status: "success", data: currentLiveAds });
       }
     } catch (error) {
       console.error(error);
