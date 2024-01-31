@@ -212,7 +212,7 @@ class UserController{
                 delete modifieduser.password;
                 return modifieduser
             })
-           res.status(201).send({"status":'success',"message":'data fetched',data:filteredUsers})
+           res.status(200).send({"status":'success',"message":'data fetched',data:filteredUsers})
         }
       else{
        res.status(400).send({
@@ -220,7 +220,7 @@ class UserController{
        })
       }
     } catch(error){
-       res.send({ "status": "failed", "message": "Something went wrong" })
+       res.status(404).send({ "status": "failed", "message": "Something went wrong" })
     }
   }
   static updateRoles = async (req,res)=>{
@@ -239,7 +239,7 @@ class UserController{
                 type: user_role,
             }
         })
-           res.status(201).send({"status":'success',"message":'Role Updated successfully'})
+           res.status(201).send({"status":'success',"message":'Role updated successfully'})
         }
       else{
        res.status(400).send({
@@ -247,7 +247,7 @@ class UserController{
        })
       }
     } catch(error){
-       res.send({ "status": "failed", "message": "Something went wrong" })
+       res.status(404).send({ "status": "failed", "message": "Something went wrong" })
     }
   }
 }

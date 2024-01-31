@@ -17,8 +17,7 @@ class UploadController {
         const response = await cloudinary.v2.uploader.upload(file, options);
         return response;
       } catch (error) {
-        console.error('Error uploading to Cloudinary:', error);
-        throw error; // Re-throw the error to handle it in the calling function
+        throw error;
       }
     };
     try {
@@ -35,20 +34,19 @@ class UploadController {
           creator: user.email,
       })
       await newImageUpload.save();
-        res.status(201).send({ "status": "success", "message": cloudinaryResponse.resource_type=='image'?"Image Uploaded successfully":"Video Uploaded successfully","link":cloudinaryResponse.secure_url });
+        res.status(201).send({ "status": "success", "message": cloudinaryResponse.resource_type=='image'?"Image uploaded successfully":"Video uploaded successfully","link":cloudinaryResponse.secure_url });
       } else {
-        res.status(400).send({ "status": "failure", "message": "Could not upload" });
+        res.status(400).send({ "status": "failure", "message": "Could not upload multimedia" });
       }
     } catch (error) {
-      // console.log(error);
-      res.status(500).send({ "status": "failure", "message": "Internal server error" });
+      res.status(404).send({ "status": "failure", "message": "Something went wrong" });
     }
   }
   static getMultimedia = async (req, res) => {
     const user = await UserModel.findOne({ email: req.user.email });
     try {
         if (!user) {
-            res.status(400).send({ "status": "failure", "message": "Not a valid user" });
+            res.status(400).send({ "status": "failure", "message": "Invalid request" });
         }
         if (user.type === 'Content Creator') {
             const ads = await MultimediaModel.find({ creator: user.email }, { url: 1, resource_type: 1, format: 1 });
@@ -59,7 +57,7 @@ class UploadController {
         }
     } catch (error) {
         // console.log(error);
-        res.status(500).send({ "status": "failure", "message": "Something went wrong" });
+        res.status(404).send({ "status": "failure", "message": "Something went wrong" });
     }
 }
 }

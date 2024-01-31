@@ -66,7 +66,7 @@ class AdController {
           await adMetrics.save();
           res
             .status(201)
-            .send({ status: "success", message: "Add created successfully" });
+            .send({ status: "success", message: "Ad created successfully" });
         } catch (error) {
           // console.log(error);
           res
@@ -75,7 +75,7 @@ class AdController {
         }
       } else {
         res
-          .status(403)
+          .status(404)
           .send({
             status: "failed",
             message: "Only Advertiser are permitted to post Ad",
@@ -131,7 +131,7 @@ class AdController {
     } catch (error) {
       console.error(error);
       res
-        .status(500)
+        .status(404)
         .json({ status: "failed", message: "Failed to retrieve ads" });
     }
   };
@@ -274,7 +274,7 @@ class AdController {
       ) {
         return res
           .status(400)
-          .json({ status: "failed", message: "Invalid request format" });
+          .json({ status: "failed", message: "Invalid Request" });
       }
       for (const view of views) {
         const { ad_id, count } = view;
@@ -308,8 +308,8 @@ class AdController {
     } catch (error) {
       console.error(error);
       res
-        .status(400)
-        .json({ status: "failed", message: "Failed to delete ad" });
+        .status(404)
+        .json({ status: "failed", message: "Failed to update metrics" });
     }
   };
 }
