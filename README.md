@@ -1,3 +1,60 @@
+# Backend Setup Guide
+
+To run the backend of this project, follow the steps outlined below:
+
+## Prerequisites
+
+- Install MongoDB and MongoDB Compass.
+- Ensure you have Node.js and npm installed on your machine.
+
+## Installation
+
+1. Clone the project from GitHub:
+   ```bash
+   git clone https://github.com/your-username/your-project.git
+   ```
+2. Navigate into the project directory:
+   ```bash
+   cd your-project
+   ```
+3. Install project dependencies:
+   ```bash
+   npm install
+   ```
+
+## Configuration
+
+Create a `.env` file at the root of the project directory.
+
+Add the following environment variables to the `.env` file:
+
+```plaintext
+DATABASE_URL="mongodb://localhost:27017"
+JWT_SECRET_KEY="jfds6532d9dx3ddsdf93v5"  // add any random key here for secret key generation
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_USER='youremail@gmail.com'  // add your email here
+EMAIL_PASS='your email password'  // add your email password here
+EMAIL_FROM='youremail@gmail.com'  // add your email here
+API_KEY='YOUR_CLOUDINARY_API_KEY'
+API_SECRET='YOUR_CLOUDINARY_API_KEY'
+API_ENVIRONMENT_VARIABLE='YOUR_CLOUDINARY_ENVIRONMENT_VARIABLE'
+API_CLOUD_NAME='YOUR_CLOUDINARY_CLOUD_NAME'
+```
+
+## Cloudinary Configuration
+
+1. Create an account on Cloudinary and obtain the necessary credentials.
+2. Fill in the corresponding keys in the `.env` file with the obtained credentials.
+
+## Running the Backend
+
+Once you have completed the installation and configuration steps, you can start the backend server by running:
+
+```bash
+npm run dev
+```
+
 # API Documentation
 
 ## Base URL
