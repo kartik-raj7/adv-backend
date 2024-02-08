@@ -11,11 +11,11 @@ To run the backend of this project, follow the steps outlined below:
 
 1. Clone the project from GitHub:
    ```bash
-   git clone https://github.com/your-username/your-project.git
+   git clone https://github.com/kartik-raj7/adv-backend.git
    ```
 2. Navigate into the project directory:
    ```bash
-   cd your-project
+   cd adv-backend
    ```
 3. Install project dependencies:
    ```bash
